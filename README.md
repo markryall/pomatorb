@@ -1,6 +1,6 @@
 # Pomato
 
-TODO: Write a gem description
+command line pomodoro tool
 
 ## Installation
 
@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Nothing yet - this tool currently does nothing at all.
 
 ## Contributing
 
