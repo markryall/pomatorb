@@ -1,4 +1,4 @@
-require 'pomato/version'
+require 'pomato/tick'
 
 module Pomato
   module Cli
@@ -8,7 +8,7 @@ module Pomato
     end
 
     def self.tick(*args)
-      puts ['tick', *args].join(' ')
+      Pomato::Tick.new(*args).execute
     end
   end
 end
