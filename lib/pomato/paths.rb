@@ -1,3 +1,4 @@
+require 'securerandom'
 require 'fileutils'
 require 'yaml'
 
@@ -19,24 +20,8 @@ module Pomato
       `afplay #{path_to('alert.mp3')}`
     end
 
-    def current_jobs
-      state[:jobs] || []
-    end
-
-    def state=(state)
-      dump_yaml state_path, state
-    end
-
-    def state
-      load_yaml state_path
-    end
-
     def history(message)
       append_to history_path, "#{now} #{message}"
-    end
-
-    def state_path
-      File.join home, 'state'
     end
 
     def history_path
@@ -47,8 +32,21 @@ module Pomato
       File.expand_path(File.join(home, name))
     end
 
-    def home
-      (File.expand_path('~') + '/.pomato').tap {|path| mkdir_p path }
+    def jobs
+      Dir["#{home('jobs')}/*"].map {|p| load_yaml(p).merge(id: p) }
+    end
+
+    def make_job(job)
+      dump_yaml(File.join(home('jobs'), SecureRandom.uuid), job)
+    end
+
+    def finish_job(job)
+      history "finish #{job[:time]} #{job[:name]}"
+      File.delete job[:id]
+    end
+
+    def home(*paths)
+      (File.join(File.expand_path('~'),'/.pomato',*paths)).tap {|path| mkdir_p path }
     end
 
     def append_to(path, content)

@@ -6,11 +6,10 @@ module Pomato
 
     def execute
       jobs = current_jobs
-      time = args.shift.to_i
+      time = args.shift.to_i * 60
       name = args.join(' ')
       history "start #{time} #{name}"
-      jobs.push start: now, name: name, time: time
-      self.state = { jobs: jobs }
+      make_job start: now, name: name, time: time
     end
   end
 end

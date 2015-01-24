@@ -5,17 +5,13 @@ module Pomato
     include Paths
 
     def execute
-      jobs = []
       alert = false
-      current_jobs.each do |job|
+      jobs.each do |job|
         if (job[:start] + job[:time]) < now
+          finish_job job
           alert = true
-          history "finish #{job[:time]} #{job[:name]}"
-        else
-          jobs << job
         end
       end
-      self.state = { jobs: jobs }
       play_alert if alert
     end
   end
