@@ -33,7 +33,7 @@ module Pomato
     end
 
     def history_items
-      File.exist?(path_to('history')) ? File.readlines(history_path) : []
+      File.exist?(path_to('history')) ? File.readlines(path_to('history')) : []
     end
 
     def path_to(name)

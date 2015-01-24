@@ -3,10 +3,10 @@
 $LOAD_PATH << File.dirname(__FILE__)+'/../lib'
 
 require 'daemons'
-require 'pomato/tick'
+require 'pomato/report'
 require 'pomato/run'
 
-Pomato::Tick.new.execute
+Pomato::Report.new.execute
 Daemons.run_proc('pomato', dir_mode: :normal, dir: '~/.pomato') do
   Pomato::Run.new.execute
 end
