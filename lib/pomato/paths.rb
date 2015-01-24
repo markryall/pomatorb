@@ -24,6 +24,10 @@ module Pomato
       append_to history_path, "#{now} #{message}"
     end
 
+    def history_items
+      File.exist?(history_path) ? File.readlines(history_path) : []
+    end
+
     def history_path
       File.join home, 'history'
     end
@@ -33,7 +37,7 @@ module Pomato
     end
 
     def jobs
-      Dir["#{home('jobs')}/*"].map {|p| load_yaml(p).merge(id: p) }
+      Dir["#{home('jobs')}/*"].map {|p| load_yaml(p) }
     end
 
     def dump_job(job)
@@ -41,19 +45,23 @@ module Pomato
     end
 
     def start_job(job)
-      id = SecureRandom.uuid
-      history "finish #{job[:id]} #{job[:time]} #{job[:name]}"
-      dump_job job.merge(start: now, id: id)
+      job[:id] = SecureRandom.uuid
+      history "#{job[:id]} start #{job[:time]} #{job[:name]}"
+      dump_job job.merge(start: now)
     end
 
     def stop_job(job)
-      history "stop #{job[:id]} #{job[:time]} #{job[:name]}"
-      File.delete job[:id]
+      history "#{job[:id]} stop #{job[:time]} #{job[:name]}"
+      destroy_job job
     end
 
     def finish_job(job)
-      history "finish #{job[:id]} #{job[:time]} #{job[:name]}"
-      File.delete job[:id]
+      history "#{job[:id]} finish #{job[:time]} #{job[:name]}"
+      destroy_job job
+    end
+
+    def destroy_job(job)
+      File.delete File.join(home('jobs'), job[:id])
     end
 
     def home(*paths)
