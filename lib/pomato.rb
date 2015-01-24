@@ -1,4 +1,5 @@
 require 'pomato/tick'
+require 'pomato/start'
 
 module Pomato
   module Cli
@@ -9,6 +10,10 @@ module Pomato
 
     def self.tick(*args)
       Pomato::Tick.new(*args).execute
+    end
+
+    def self.start(*args)
+      Pomato::Start.new(*args).execute
     end
   end
 end

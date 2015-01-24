@@ -1,42 +1,18 @@
-require 'fileutils'
-require 'yaml'
+require 'pomato/paths'
 
 module Pomato
   class Tick
-    include FileUtils
-
-    attr_reader :args
-
-    def initialize(*args)
-      @args = args
-    end
+    include Paths
 
     def execute
-      state[:time] = Time.now.to_i
-      persist
-    end
-
-    private
-
-    def persist
-      File.open(path, 'w') { |f| YAML.dump(state, f) }
-    end
-
-    def state
-      return @state if @state
-      @state = {}
-      @state = YAML.load_file(path) if File.exist?(path)
-      @state
-    end
-
-    def path
-      @path ||= File.join home, 'state'
-    end
-
-    def home
-      return @home if @home
-      @home = File.expand_path('~') + '/.pomato'
-      @home.tap {|path| mkdir_p path }
+      now = Time.now.to_i
+      jobs = []
+      current_jobs.each do |job|
+        if job[:time] < now
+          history "finish #{job[:time]} #{job[:name]}"
+        end
+      end
+      self.state = { jobs: jobs }
     end
   end
 end
