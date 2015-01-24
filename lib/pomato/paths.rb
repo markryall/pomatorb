@@ -36,12 +36,23 @@ module Pomato
       Dir["#{home('jobs')}/*"].map {|p| load_yaml(p).merge(id: p) }
     end
 
-    def make_job(job)
-      dump_yaml(File.join(home('jobs'), SecureRandom.uuid), job)
+    def dump_job(job)
+      dump_yaml(File.join(home('jobs'), job[:id]), job)
+    end
+
+    def start_job(job)
+      id = SecureRandom.uuid
+      history "finish #{job[:id]} #{job[:time]} #{job[:name]}"
+      dump_job job.merge(start: now, id: id)
+    end
+
+    def stop_job(job)
+      history "stop #{job[:id]} #{job[:time]} #{job[:name]}"
+      File.delete job[:id]
     end
 
     def finish_job(job)
-      history "finish #{job[:time]} #{job[:name]}"
+      history "finish #{job[:id]} #{job[:time]} #{job[:name]}"
       File.delete job[:id]
     end
 

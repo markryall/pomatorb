@@ -1,24 +1,18 @@
-require 'pomato/tick'
-require 'pomato/start'
-require 'pomato/report'
-
 module Pomato
   module Cli
     def self.execute(*args)
       method, *args = args
-      send (method || :report), *args
+      method ||= :report
+      page_class(method).new(*args).execute
     end
 
-    def self.report
-      Pomato::Report.new.execute
+    def self.classify(string)
+      string.to_s.split('_').map(&:capitalize).join
     end
 
-    def self.tick(*args)
-      Pomato::Tick.new(*args).execute
-    end
-
-    def self.start(*args)
-      Pomato::Start.new(*args).execute
+    def self.page_class(name)
+      require "pomato/#{name}"
+      Pomato.const_get classify name
     end
   end
 end
