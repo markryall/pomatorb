@@ -11,6 +11,14 @@ module Pomato
       @args = args
     end
 
+    def now
+      @now ||= Time.now.to_i
+    end
+
+    def play_alert
+      `afplay #{path_to('alert.mp3')}`
+    end
+
     def current_jobs
       state[:jobs] || []
     end
@@ -24,7 +32,7 @@ module Pomato
     end
 
     def history(message)
-      append_to history_path, message
+      append_to history_path, "#{now} #{message}"
     end
 
     def state_path
@@ -33,6 +41,10 @@ module Pomato
 
     def history_path
       File.join home, 'history'
+    end
+
+    def path_to(name)
+      File.expand_path(File.join(home, name))
     end
 
     def home
