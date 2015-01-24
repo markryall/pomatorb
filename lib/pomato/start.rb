@@ -5,7 +5,6 @@ module Pomato
     include Paths
 
     def execute
-      jobs = current_jobs
       time = args.shift.to_i * 60
       name = args.join(' ')
       history "start #{time} #{name}"
