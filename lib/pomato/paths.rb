@@ -16,20 +16,24 @@ module Pomato
       @now ||= Time.now.to_i
     end
 
+    def config
+      load_yaml path_to 'config'
+    end
+
+    def config=(data)
+      dump_yaml path_to('config'), data
+    end
+
     def play_alert
-      `afplay #{path_to('alert.mp3')}`
+      `afplay #{config[:track]}`
     end
 
     def history(message)
-      append_to history_path, "#{now} #{message}"
+      append_to path_to('history'), "#{now} #{message}"
     end
 
     def history_items
-      File.exist?(history_path) ? File.readlines(history_path) : []
-    end
-
-    def history_path
-      File.join home, 'history'
+      File.exist?(path_to('history')) ? File.readlines(history_path) : []
     end
 
     def path_to(name)
