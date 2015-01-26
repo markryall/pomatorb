@@ -42,19 +42,19 @@ module Pomato
       dump_yaml(File.join(home('jobs'), job[:id]), job)
     end
 
-    def start_job(job)
+    def add_job(job)
       job[:id] = SecureRandom.uuid
-      history "#{job[:id]} start #{job[:time]} #{job[:name]}"
-      dump_job job.merge(start: now)
+      history "#{job[:id]} add #{job[:start]} #{job[:time]} #{job[:name]}"
+      dump_job job
     end
 
     def stop_job(job)
-      history "#{job[:id]} stop #{job[:time]} #{job[:name]}"
+      history "#{job[:id]} stop #{job[:start]} #{job[:time]} #{job[:name]}"
       destroy_job job
     end
 
     def finish_job(job)
-      history "#{job[:id]} finish #{job[:time]} #{job[:name]}"
+      history "#{job[:id]} finish #{job[:start]} #{job[:time]} #{job[:name]}"
       destroy_job job
     end
 

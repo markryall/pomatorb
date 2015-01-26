@@ -5,11 +5,16 @@ module Pomato
     include Paths
 
     def execute
-      jobs.sort_by! {|j| now + j[:time]}.each do |job|
-        elapsed = now - job[:start]
-        remaining = job[:time] - elapsed
-        end_time = now + job[:time]
-        puts " #{time_format end_time} (#{min_sec elapsed} completed, #{min_sec remaining} of #{min_sec job[:time]} remaining): #{job[:name]}"
+      jobs.sort_by! {|job| job[:start] + job[:time]}.each do |job|
+        end_time = job[:start] + job[:time]
+        if now > job[:start]
+          elapsed = now - job[:start]
+          remaining = job[:time] - elapsed
+          puts " #{time_format end_time} (#{min_sec elapsed} completed, #{min_sec remaining} of #{min_sec job[:time]} remaining): #{job[:name]}"
+        else
+          starting = job[:start] - now
+          puts " #{time_format end_time} (#{min_sec job[:time]} starting in #{min_sec starting}): #{job[:name]}"
+        end
       end
     end
 
