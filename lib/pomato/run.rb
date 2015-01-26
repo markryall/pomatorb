@@ -4,7 +4,7 @@ module Pomato
   class Run
     include Paths
 
-    def execute(*args)
+    def execute
       loop do
         Pomato::Tick.new.execute
         sleep 10

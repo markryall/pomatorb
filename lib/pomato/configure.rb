@@ -4,7 +4,7 @@ module Pomato
   class Configure
     include Paths
 
-    def execute(*args)
+    def execute
       puts 'which track would you like to play when the timer ends?'
       self.config = { track: $stdin.gets.chomp }
     end

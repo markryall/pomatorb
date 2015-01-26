@@ -6,12 +6,6 @@ module Pomato
   module Paths
     include FileUtils
 
-    attr_reader :args
-
-    def initialize(*args)
-      @args = args
-    end
-
     def now
       @now ||= Time.now.to_i
     end

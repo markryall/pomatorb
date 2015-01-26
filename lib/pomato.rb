@@ -1,9 +1,9 @@
 module Pomato
   module Cli
     def self.execute(*args)
-      method, *args = args
+      method = ARGV.shift
       method ||= :report
-      page_class(method).new(*args).execute
+      page_class(method).new.execute
     end
 
     def self.classify(string)

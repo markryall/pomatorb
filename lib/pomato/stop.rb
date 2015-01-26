@@ -5,7 +5,7 @@ module Pomato
     include Paths
 
     def execute
-      search_string = args.first
+      search_string = ARGV.join(' ')
       jobs.each do |job|
         if job[:name].include? search_string
           puts "stopping \"#{job[:name]}\""
